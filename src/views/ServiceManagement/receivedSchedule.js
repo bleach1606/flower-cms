@@ -46,19 +46,6 @@ class ReceivedSchedule extends Component {
     }
   }
 
-  filterListSchedule = async () => {
-    const { query, type } = this.state;
-    if (!query && !type) {
-      await this.getListSchedule(query, type);
-      return;
-    }
-    if (!query || !type) {
-      this.showNotification("Vui lòng điền đầy đủ thông tin");
-      return;
-    }
-    await this.getListSchedule(query, type);
-  }
-
   render() {
     const { schedules, isLoading } = this.state;
     return (

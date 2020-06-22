@@ -46,18 +46,6 @@ class CancelSchedule extends Component {
     }
   }
 
-  filterListSchedule = async () => {
-    const { query, type } = this.state;
-    if (!query && !type) {
-      await this.getListSchedule(query, type);
-      return;
-    }
-    if (!query || !type) {
-      this.showNotification("Vui lòng điền đầy đủ thông tin");
-      return;
-    }
-    await this.getListSchedule(query, type);
-  }
 
   render() {
     const { schedules, isLoading } = this.state;
@@ -101,7 +89,7 @@ class CancelSchedule extends Component {
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
                                     <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
-                                      <Button color="danger" size="sm" className="btn-pill">Đồng ý hủy</Button>
+                                      <Button color="success" size="sm" className="btn-pill">Đồng ý hủy</Button>
                                     </Link>
                                   </td>
                                   <td>

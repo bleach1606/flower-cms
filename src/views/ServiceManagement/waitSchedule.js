@@ -46,19 +46,6 @@ class WaitSchedule extends Component {
     }
   }
 
-  filterListSchedule = async () => {
-    const { query, type } = this.state;
-    if (!query && !type) {
-      await this.getListSchedule(query, type);
-      return;
-    }
-    if (!query || !type) {
-      this.showNotification("Vui lòng điền đầy đủ thông tin");
-      return;
-    }
-    await this.getListSchedule(query, type);
-  }
-
   render() {
     const { schedules, isLoading } = this.state;
     return (
@@ -100,7 +87,7 @@ class WaitSchedule extends Component {
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
                                     <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
-                                      <Button color="danger" size="sm" className="btn-pill">Chi tiết</Button>
+                                      <Button color="info" size="sm" className="btn-pill">Chi tiết</Button>
                                     </Link>
                                   </td>
                                 </tr>

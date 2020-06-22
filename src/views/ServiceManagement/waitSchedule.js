@@ -77,6 +77,7 @@ class WaitSchedule extends Component {
                     <Table responsive striped>
                       <thead>
                         <tr>
+                          <th>ID</th>
                           <th>Tên khách hàng</th>
                           <th>Tên người nhận</th>
                           <th>Số điện thoại</th>
@@ -91,6 +92,7 @@ class WaitSchedule extends Component {
                             schedules.map(schedule => {
                               return (
                                 <tr key={schedule.id}>
+                                  <td>{schedule.id}</td>
                                   <td>{schedule.users.people.firstName + schedule.users.people.lastName}</td>
                                   <td>{schedule.receiverName}</td>
                                   <td>{schedule.receiverTel}</td>

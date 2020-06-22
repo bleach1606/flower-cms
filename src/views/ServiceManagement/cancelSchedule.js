@@ -77,11 +77,13 @@ class CancelSchedule extends Component {
                     <Table responsive striped>
                       <thead>
                         <tr>
+                          <th>ID</th>
                           <th>Tên khách hàng</th>
                           <th>Tên người nhận</th>
                           <th>Số điện thoại</th>
                           <th>Địa chỉ</th>
                           <th>Ngày tạo</th>
+                          <th></th>
                           <th></th>
                         </tr>
                       </thead>
@@ -91,6 +93,7 @@ class CancelSchedule extends Component {
                             schedules.map(schedule => {
                               return (
                                 <tr key={schedule.id}>
+                                  <td>{schedule.id}</td>
                                   <td>{schedule.users.people.firstName + schedule.users.people.lastName}</td>
                                   <td>{schedule.receiverName}</td>
                                   <td>{schedule.receiverTel}</td>
@@ -98,7 +101,12 @@ class CancelSchedule extends Component {
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
                                     <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
-                                      <Button color="danger" size="sm" className="btn-pill">Chi tiết</Button>
+                                      <Button color="danger" size="sm" className="btn-pill">Đồng ý hủy</Button>
+                                    </Link>
+                                  </td>
+                                  <td>
+                                    <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
+                                      <Button color="danger" size="sm" className="btn-pill">Không được hủy</Button>
                                     </Link>
                                   </td>
                                 </tr>

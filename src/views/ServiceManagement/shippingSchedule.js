@@ -98,7 +98,7 @@ class ShippingSchedule extends Component {
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
                                     <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
-                                      <Button color="danger" size="sm" className="btn-pill">Chi tiết</Button>
+                                      <Button color="danger" size="sm" className="btn-pill">Chuyển giao hàng</Button>
                                     </Link>
                                   </td>
                                 </tr>

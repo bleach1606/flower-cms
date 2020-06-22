@@ -77,6 +77,7 @@ class ConfirmSchedule extends Component {
                     <Table responsive striped>
                       <thead>
                         <tr>
+                          <th>ID</th>
                           <th>Tên khách hàng</th>
                           <th>Tên người nhận</th>
                           <th>Số điện thoại</th>
@@ -91,6 +92,7 @@ class ConfirmSchedule extends Component {
                             schedules.map(schedule => {
                               return (
                                 <tr key={schedule.id}>
+                                  <td>{schedule.id}</td>
                                   <td>{schedule.users.people.firstName + schedule.users.people.lastName}</td>
                                   <td>{schedule.receiverName}</td>
                                   <td>{schedule.receiverTel}</td>
@@ -98,7 +100,7 @@ class ConfirmSchedule extends Component {
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
                                     <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
-                                      <Button color="danger" size="sm" className="btn-pill">Chi tiết</Button>
+                                      <Button color="danger" size="sm" className="btn-pill">Chuyển đóng gói</Button>
                                     </Link>
                                   </td>
                                 </tr>

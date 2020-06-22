@@ -2,6 +2,7 @@ import axios from "axios";
 import config from "../config";
 import AuthService from "../services/auth";
 export default class serviceManagement {
+  
   static async getListSchedule(query) {
     const token = AuthService.getToken();
     const response = await axios.get(`${config.domain}/orderbill/`, {

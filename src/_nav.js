@@ -15,9 +15,34 @@ export default {
       children: [
         {
           name: 'Lịch đang chờ',
+          url: '/await-schedule',
+          icon: '',
+        },
+        {
+          name: 'Đã xác nhận',
           url: '/confirm-schedule',
           icon: '',
-        }
+        },
+        {
+          name: 'Đang đóng gói',
+          url: '/packing-schedule',
+          icon: '',
+        },
+        {
+          name: 'Đang được giao',
+          url: '/shipping-schedule',
+          icon: '',
+        },
+        {
+          name: 'Đã giao hàng',
+          url: '/received-schedule',
+          icon: '',
+        },
+        {
+          name: 'Yêu cầu hủy',
+          url: '/cancel-schedule',
+          icon: '',
+        },
       ],
     },
     {

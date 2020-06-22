@@ -1,4 +1,4 @@
 export default {
-  domain: "http://192.168.1.27:8080",
+  domain: "http://127.0.0.1:8080",
   default_page_size: 20
 }

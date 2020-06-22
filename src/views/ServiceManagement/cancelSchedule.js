@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ServiceManagement from "../../services/serviceManagement";
 
-class ConfirmSchedule extends Component {
+class CancelSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +36,7 @@ class ConfirmSchedule extends Component {
 
   getListSchedule = async () => {
     try {
-      const data = await ServiceManagement.getListSchedule(3);
+      const data = await ServiceManagement.getListSchedule(7);
       this.setState({
         schedules: data.data,
         isLoading: false
@@ -118,4 +118,4 @@ class ConfirmSchedule extends Component {
   }
 }
 
-export default ConfirmSchedule;
+export default CancelSchedule;

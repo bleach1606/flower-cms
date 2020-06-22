@@ -89,7 +89,7 @@ class DefaultLayout extends Component {
                         )} />
                     ) : (null);
                   })}
-                  <Redirect from="/" to="/confirm-schedule" />
+                  <Redirect from="/" to="/wait-schedule" />
                 </Switch>
               </Suspense>
             </Container>

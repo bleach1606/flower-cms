@@ -19,10 +19,14 @@ export default class serviceManagement {
     const response = await axios.put(`${config.domain}/orderbill/update-status/${id}/?status=${status}`, "", {
       headers: { 'Authorization': token }
     });
-
-    console.log(response)
-
     return response.data;
   }
 
+  static async getScheduleDetail(id) {
+    const token = AuthService.getToken();
+    const response = await axios.get(`${config.domain}/orderbill/${id}`, {
+      headers: { 'Authorization': token },
+    });
+    return response.data.data;
+  }
 }

@@ -6,6 +6,9 @@ const PackingSchedule = React.lazy(() => import('./views/ServiceManagement/packi
 const ShippingSchedule = React.lazy(() => import('./views/ServiceManagement/shippingSchedule'));
 const ReceivedSchedule = React.lazy(() => import('./views/ServiceManagement/receivedSchedule'));
 const CancelSchedule = React.lazy(() => import('./views/ServiceManagement/cancelSchedule'));
+const ListCategory = React.lazy(() => import('./views/Category/category'));
+const FlowerProduct = React.lazy(() => import('./views/Category/flowerProduts'));
+const ScheduleDetail = React.lazy(() => import('./views/ServiceManagement/scheduleDetail'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -16,7 +19,9 @@ const routes = [
   { path: '/shipping-schedule', exact: true, name: 'Danh sách đang được vận chuyển', component: ShippingSchedule },
   { path: '/received-schedule', exact: true, name: 'Danh sách đã được giao', component: ReceivedSchedule },
   { path: '/cancel-schedule', exact: true, name: 'Danh sách yêu cầu hủy', component: CancelSchedule },
-
+  { path: '/list-categorys', exact: true, name: 'Danh sách danh mục', component: ListCategory},
+  { path: '/list-flower-products', exact: true, name: 'Danh sách sản phẩm', component: FlowerProduct},
+  { path: '/orderbill/:id', name: 'Chi tiết đơn hàng', component: ScheduleDetail },
   // { path: '/list-service', exact: true, name: 'Danh sách danh mục dịch vụ', component: ListService },
 ];
 

@@ -55,7 +55,7 @@ class CancelSchedule extends Component {
           <Col xs="12" lg="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách đặt lịch
+                <i className="fa fa-align-justify"></i> Danh sách đơn yêu cầu hủy
               </CardHeader>
               {
                 isLoading ?
@@ -88,12 +88,12 @@ class CancelSchedule extends Component {
                                   <td>{schedule.receiverAddress}</td>
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
-                                    <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
+                                    <Link to={`/orderbill/update-status/${schedule.id}`}>
                                       <Button color="success" size="sm" className="btn-pill">Đồng ý hủy</Button>
                                     </Link>
                                   </td>
                                   <td>
-                                    <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
+                                    <Link to={`/orderbill/update-status/${schedule.id}`}>
                                       <Button color="danger" size="sm" className="btn-pill">Không được hủy</Button>
                                     </Link>
                                   </td>

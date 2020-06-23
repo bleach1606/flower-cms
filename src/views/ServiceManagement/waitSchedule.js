@@ -54,7 +54,7 @@ class WaitSchedule extends Component {
           <Col xs="12" lg="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách đặt lịch
+                <i className="fa fa-align-justify"></i> Danh sách chờ xác nhận
               </CardHeader>
               {
                 isLoading ?
@@ -86,7 +86,7 @@ class WaitSchedule extends Component {
                                   <td>{schedule.receiverAddress}</td>
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
-                                    <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
+                                    <Link to={`/orderbill/${schedule.id}`}>
                                       <Button color="info" size="sm" className="btn-pill">Chi tiết</Button>
                                     </Link>
                                   </td>

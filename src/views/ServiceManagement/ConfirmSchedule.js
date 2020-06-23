@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBody, CardHeader, Col, Row, Table, Spinner } from 'reactstrap';
-import { Link } from "react-router-dom";
+import { Modal, ModalBody, ModalHeader, ModalFooter, Button, Card, CardBody, CardHeader, Col, Row, Table, Spinner } from 'reactstrap';
 import moment from 'moment-timezone';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,9 +10,10 @@ class ConfirmSchedule extends Component {
     super(props);
     this.state = {
       schedules: [],
+      scheduleId: '',
       isLoading: true,
-      type: "",
-      query: ""
+      isLoadingConfirmDone: false,
+      openConfirmDoneSchedule: false,
     }
   }
 
@@ -46,15 +46,46 @@ class ConfirmSchedule extends Component {
     }
   }
 
+  toPackingSchedule = async () => {
+    this.setState({
+      isLoadingConfirmDone: true,
+    })
+    try {
+      await ServiceManagement.updateStatus(this.state.scheduleId, 4);
+      this.showNotification("Thành công", true);
+      setTimeout(() => {
+        this.setState({
+          openConfirmDoneSchedule: !this.state.openConfirmDoneSchedule,
+          isLoadingConfirmDone: false,
+          redirect: true,
+        })
+      }, 1000);
+      window.location.reload(false);
+    } catch (error) {
+      this.showNotification("Đã xảy ra lỗi, vui lòng thử lại sau", false);
+      this.setState({
+        openConfirmDoneSchedule: !this.state.openConfirmDoneSchedule,
+        isLoadingConfirmDone: false,
+      })
+    }
+  }
+
+  openConfirmDoneSchedule = (scheduleId) => {
+    this.setState({
+      openConfirmDoneSchedule: !this.state.openConfirmDoneSchedule,
+      scheduleId: scheduleId
+    })
+  }
+
   render() {
-    const { schedules, isLoading } = this.state;
+    const { schedules, isLoading, openConfirmDoneSchedule, isLoadingConfirmDone } = this.state;
     return (
       <div className="animated fadeIn">
         <Row>
           <Col xs="12" lg="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách đặt lịch
+                <i className="fa fa-align-justify"></i> Danh sách đã xác nhận lịch đặt
               </CardHeader>
               {
                 isLoading ?
@@ -86,9 +117,7 @@ class ConfirmSchedule extends Component {
                                   <td>{schedule.receiverAddress}</td>
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
-                                    <Link to={`/orderbill/update-status/${schedule.id}`}>
-                                      <Button color="success" size="sm" className="btn-pill">Chuyển đóng gói</Button>
-                                    </Link>
+                                    <Button onClick={() => this.openConfirmDoneSchedule(schedule.id)} color="success" size="sm" className="btn-pill">Chuyển đóng gói</Button>
                                   </td>
                                 </tr>
                               )
@@ -99,6 +128,18 @@ class ConfirmSchedule extends Component {
                   </CardBody>
               }
             </Card>
+            <Modal isOpen={openConfirmDoneSchedule} toggle={this.openConfirmDoneSchedule}>
+              <ModalHeader toggle={this.openConfirmDoneSchedule}>Xác nhận hoàn thành dịch vụ</ModalHeader>
+              <ModalBody>
+                Bạn chắc chắn muốn thực hiện hành động này ?
+              </ModalBody>
+              <ModalFooter>
+                {
+                  isLoadingConfirmDone ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.toPackingSchedule}>Xác nhận</Button>
+                }
+                <Button color="secondary" onClick={this.openConfirmDoneSchedule}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
           </Col>
         </Row>
         <ToastContainer />

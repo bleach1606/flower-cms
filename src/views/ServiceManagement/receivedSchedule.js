@@ -54,7 +54,7 @@ class ReceivedSchedule extends Component {
           <Col xs="12" lg="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách đặt lịch
+                <i className="fa fa-align-justify"></i> Danh sách đã được giao
               </CardHeader>
               {
                 isLoading ?
@@ -86,7 +86,7 @@ class ReceivedSchedule extends Component {
                                   <td>{schedule.receiverAddress}</td>
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
-                                    <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
+                                    <Link to={`/orderbill/update-status/${schedule.id}`}>
                                       <Button color="danger" size="sm" className="btn-pill">Chi tiết</Button>
                                     </Link>
                                   </td>

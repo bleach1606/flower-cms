@@ -54,7 +54,7 @@ class ShippingSchedule extends Component {
           <Col xs="12" lg="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách đặt lịch
+                <i className="fa fa-align-justify"></i> Danh sách đang được giao
               </CardHeader>
               {
                 isLoading ?
@@ -64,6 +64,7 @@ class ShippingSchedule extends Component {
                     <Table responsive striped>
                       <thead>
                         <tr>
+                          <th>ID</th>
                           <th>Tên khách hàng</th>
                           <th>Tên người nhận</th>
                           <th>Số điện thoại</th>
@@ -78,13 +79,14 @@ class ShippingSchedule extends Component {
                             schedules.map(schedule => {
                               return (
                                 <tr key={schedule.id}>
+                                  <td>{schedule.id}</td>
                                   <td>{schedule.users.people.firstName + schedule.users.people.lastName}</td>
                                   <td>{schedule.receiverName}</td>
                                   <td>{schedule.receiverTel}</td>
                                   <td>{schedule.receiverAddress}</td>
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
-                                    <Link to={`/confirmed-schedule/detail-schedule/${schedule.id}`}>
+                                    <Link to={`/orderbill/update-status/${schedule.id}`}>
                                       <Button color="success" size="sm" className="btn-pill">Chuyển giao hàng</Button>
                                     </Link>
                                   </td>

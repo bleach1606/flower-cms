@@ -12,10 +12,10 @@ const routes = [
   { path: '/', exact: true, name: 'Trang chủ' },
   { path: '/wait-schedule', exact: true, name: 'Danh sách lịch đang chờ', component: WaitSchedule },
   { path: '/confirm-schedule', exact: true, name: 'Danh sách đặt thành công', component: ConfirmSchedule },
-  { path: '/packing-schedule', exact: true, name: 'Danh sách lịch đang chờ', component: PackingSchedule },
-  { path: '/shipping-schedule', exact: true, name: 'Danh sách đặt thành công', component: ShippingSchedule },
-  { path: '/received-schedule', exact: true, name: 'Danh sách lịch đang chờ', component: ReceivedSchedule },
-  { path: '/cancel-schedule', exact: true, name: 'Danh sách đặt thành công', component: CancelSchedule },
+  { path: '/packing-schedule', exact: true, name: 'Danh sách đóng gói', component: PackingSchedule },
+  { path: '/shipping-schedule', exact: true, name: 'Danh sách đang được vận chuyển', component: ShippingSchedule },
+  { path: '/received-schedule', exact: true, name: 'Danh sách đã được giao', component: ReceivedSchedule },
+  { path: '/cancel-schedule', exact: true, name: 'Danh sách yêu cầu hủy', component: CancelSchedule },
 
   // { path: '/list-service', exact: true, name: 'Danh sách danh mục dịch vụ', component: ListService },
 ];

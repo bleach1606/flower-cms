@@ -93,7 +93,7 @@ class Login extends Component {
                 <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
                   <CardBody className="text-center">
                     <div>
-                      <img style={{ width: "80%", height: "auto" }} src={logo} alt="Auto Spa"></img>
+                      <img style={{ width: "80%", height: "auto" }} src={logo} alt="CAMELIA"></img>
                     </div>
                   </CardBody>
                 </Card>

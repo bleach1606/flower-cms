@@ -49,6 +49,18 @@ export default {
       name: 'Danh mục dịch vụ',
       url: '/list-service',
       icon: 'fa fa-cc-amex fa-lg',
+      children: [
+        {
+          name: 'Danh mục sản phẩm',
+          url: '/list-categorys',
+          icon: '',
+        },
+        {
+          name: 'Danh sách sản phẩm',
+          url: '/list-products',
+          icon: '',
+        },
+      ]
     },
   ],
 };

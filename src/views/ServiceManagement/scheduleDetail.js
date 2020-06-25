@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Spinner, Col, Row, Table, CardFooter, Button } from 'reactstrap';
+import { Card, CardBody, CardHeader, Spinner, Col, Row, Table, CardFooter, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +12,8 @@ class ScheduleDetail extends Component {
     super(props);
     this.state = {
       detailSchedule: {},
+      openModalCancelSchedule: false,
+      openModalConfirmSchedule: false,
       redirect: false,
       isLoading: false,
       loadingDetailSchedule: true
@@ -25,7 +27,6 @@ class ScheduleDetail extends Component {
   getScheduleDetails = async (id) => {
     try {
       const response = await ServiceManagement.getScheduleDetail(id);
-      console.log("this is response", response)
       this.setState({
         detailSchedule: response,
         loadingDetailSchedule: false
@@ -41,6 +42,17 @@ class ScheduleDetail extends Component {
     })
   }
 
+  openModalCancelSchedule = () => {
+    this.setState({
+      openModalCancelSchedule: !this.state.openModalCancelSchedule
+    })
+  }
+
+  openModalConfirmSchedule = () => {
+    this.setState({
+      openModalConfirmSchedule: !this.state.openModalConfirmSchedule
+    })
+  }
 
   showNotification = (message, status) => {
     if (status) {
@@ -56,10 +68,57 @@ class ScheduleDetail extends Component {
     }
   }
 
+  cancelSchedule = async () => {
+    this.setState({
+      isLoading: true
+    })
+    try {
+      await ServiceManagement.updateStatus(this.props.match.params.id, 9);
+      this.showNotification('Hủy đơn hàng thành công', false);
+      setTimeout(() => {
+        this.setState({
+          openModalCancelSchedule: !this.state.openModalCancelSchedule,
+          isLoading: false,
+          redirect: true
+        })
+      }, 1000);
+    } catch (error) {
+      this.showNotification('Đã xảy ra lỗi, vui lòng thử lại sau', false);
+      this.setState({
+        openModalCancelSchedule: !this.state.openModalCancelSchedule,
+        isLoading: false,
+      })
+    }
+  }
+
+  confirmSchedule = async () => {
+    this.setState({
+      isLoading: true
+    })
+    try {
+      await ServiceManagement.updateStatus(this.props.match.params.id, 3);
+      this.showNotification('Xác nhận lịch thành công', true);
+      setTimeout(() => {
+        this.setState({
+          openModalConfirmSchedule: !this.state.openModalConfirmSchedule,
+          isLoading: false,
+          redirect: true
+        })
+      }, 1000)
+    } catch (error) {
+      this.showNotification("Đã xảy ra lỗi, vui lòng thử lại sau", false);
+      this.setState({
+        openModalConfirmSchedule: !this.state.openModalConfirmSchedule,
+        isLoading: false,
+      })
+    }
+  }
+
+
   render() {
-    const { detailSchedule, redirect, loadingDetailSchedule} = this.state;
+    const { detailSchedule, isLoading, redirect, loadingDetailSchedule, openModalCancelSchedule, openModalConfirmSchedule} = this.state;
     if (redirect) {
-      return <Redirect to="/confirm-schedule" />
+      return <Redirect to="/wait-schedule" />
     }
     return (
       <div className="animated fadeIn">
@@ -87,6 +146,10 @@ class ScheduleDetail extends Component {
                           <td>{detailSchedule.users ? detailSchedule.users.people.phoneNumber : ""}</td>
                         </tr>
                         <tr>
+                          <th>Thời gian đặt</th>
+                          <td>{moment(detailSchedule.createdAt).local().format('DD/MM/YYYY HH:mm')}</td>
+                        </tr>
+                        <tr>
                           <th>Tên người nhận</th>
                           <td>{detailSchedule.users ? detailSchedule.receiverName + " " + detailSchedule.users.people.lastName : ""}</td>
                         </tr>
@@ -107,6 +170,7 @@ class ScheduleDetail extends Component {
                         <tr>
                           <th>ID</th>
                           <th>Tên sản phẩm</th>
+                          <th>Avatar</th>
                           <th>Mô tả</th>
                           <th style={{ textAlign: "right" }}>Giá (VNĐ)</th>
                           <th style={{ textAlign: "right" }}>Số lượng</th>
@@ -118,7 +182,8 @@ class ScheduleDetail extends Component {
                             <tr key={item.id}>
                               <td>{item.id}</td>
                               <td>{item.flowerProduct.name}</td>
-                              <td>{moment(detailSchedule.createdAt).local().format('DD/MM/YYYY HH:mm')}</td>
+                              <td>{item.flowerProduct.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.flowerProduct.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
+                              <td>{item.flowerProduct.description}</td>
                               <td style={{ textAlign: "right" }}>{MoneyFormat(item.flowerProduct.price)}</td>
                               <td style={{ textAlign: "right" }}>{item.number}</td>
                             </tr>
@@ -127,10 +192,10 @@ class ScheduleDetail extends Component {
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th style={{ textAlign: 'center' }} colSpan={3}>Tổng tiền</th>
+                          <th style={{ textAlign: 'center' }} colSpan={4}>Tổng tiền</th>
                           <td style={{ textAlign: 'right' }} colSpan={1}><strong>{
                             MoneyFormat(detailSchedule.cartDetailList.reduce((accumulator, currentValue) => accumulator + currentValue.flowerProduct.price * currentValue.number, 0))
-                          }</strong></td>
+                          }</strong></td> 
                           <td colSpan={1}></td>
                         </tr>
                       </tfoot>
@@ -142,8 +207,31 @@ class ScheduleDetail extends Component {
                 <Button block color="success" onClick={this.openModalConfirmSchedule}>Xác nhận đặt lịch</Button>
                 <Button block color="danger" onClick={this.openModalCancelSchedule}>Hủy đặt lịch</Button>
               </CardFooter>
-
             </Card>
+            <Modal isOpen={openModalCancelSchedule} toggle={this.openModalCancelSchedule}>
+              <ModalHeader toggle={this.openModalCancelSchedule}>Hủy đặt lịch</ModalHeader>
+              <ModalBody>
+                Bạn chắc chắn muốn thực hiện hành động này ?
+              </ModalBody>
+              <ModalFooter>
+                {
+                  isLoading ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.cancelSchedule}>Xác nhận</Button>
+                }
+                <Button color="secondary" onClick={this.openModalCancelSchedule}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
+            <Modal isOpen={openModalConfirmSchedule} toggle={this.openModalConfirmSchedule}>
+              <ModalHeader toggle={this.openModalConfirmSchedule}>Xác nhận đặt lịch</ModalHeader>
+              <ModalBody>
+                Bạn chắc chắn muốn thực hiện hành động này ?
+              </ModalBody>
+              <ModalFooter>
+                {
+                  isLoading ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.confirmSchedule}>Xác nhận</Button>
+                }
+                <Button color="secondary" onClick={this.openModalConfirmSchedule}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
           </Col>
         </Row>
         <ToastContainer />

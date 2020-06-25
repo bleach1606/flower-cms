@@ -14,7 +14,7 @@ export default {
       icon: 'fa fa-pencil-square fa-lg',
       children: [
         {
-          name: 'Lịch đang chờ',
+          name: 'Đang chờ',
           url: '/await-schedule',
           icon: '',
         },
@@ -57,7 +57,7 @@ export default {
         },
         {
           name: 'Danh sách sản phẩm',
-          url: '/list-products',
+          url: '/list-flower-products',
           icon: '',
         },
       ]

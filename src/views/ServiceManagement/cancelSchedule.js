@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBody, CardHeader, Col, Row, Table, Spinner } from 'reactstrap';
-import { Link } from "react-router-dom";
+import { Button, Card, CardBody, CardHeader, Col, Row, Table, Spinner, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import moment from 'moment-timezone';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +11,7 @@ class CancelSchedule extends Component {
     this.state = {
       schedules: [],
       isLoading: true,
+      isLoadingConfirmDone: false,
       type: "",
       query: ""
     }
@@ -34,6 +34,37 @@ class CancelSchedule extends Component {
     })
   }
 
+  openConfirmDoneSchedule = (scheduleId) => {
+    this.setState({
+      openConfirmDoneSchedule: !this.state.openConfirmDoneSchedule,
+      scheduleId: scheduleId
+    })
+  }
+
+  toCancelSchedule = async () => {
+    this.setState({
+      isLoadingConfirmDone: true,
+    })
+    try {
+      await ServiceManagement.updateStatus(this.state.scheduleId, 9);
+      this.showNotification("Thành công", true);
+      setTimeout(() => {
+        this.setState({
+          openConfirmDoneSchedule: !this.state.openConfirmDoneSchedule,
+          isLoadingConfirmDone: false,
+          redirect: true,
+        })
+      }, 1000);
+      window.location.reload(false);
+    } catch (error) {
+      this.showNotification("Đã xảy ra lỗi, vui lòng thử lại sau", false);
+      this.setState({
+        openConfirmDoneSchedule: !this.state.openConfirmDoneSchedule,
+        isLoadingConfirmDone: false,
+      })
+    }
+  }
+
   getListSchedule = async () => {
     try {
       const data = await ServiceManagement.getListSchedule(7);
@@ -48,7 +79,7 @@ class CancelSchedule extends Component {
 
 
   render() {
-    const { schedules, isLoading } = this.state;
+    const { schedules, isLoading, openConfirmDoneSchedule, isLoadingConfirmDone } = this.state;
     return (
       <div className="animated fadeIn">
         <Row>
@@ -88,14 +119,10 @@ class CancelSchedule extends Component {
                                   <td>{schedule.receiverAddress}</td>
                                   <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
                                   <td>
-                                    <Link to={`/orderbill/update-status/${schedule.id}`}>
-                                      <Button color="success" size="sm" className="btn-pill">Đồng ý hủy</Button>
-                                    </Link>
+                                    <Button onClick={() => this.openConfirmDoneSchedule(schedule.id)} color="success" size="sm" className="btn-pill">Đồng ý hủy</Button>
                                   </td>
                                   <td>
-                                    <Link to={`/orderbill/update-status/${schedule.id}`}>
-                                      <Button color="danger" size="sm" className="btn-pill">Không được hủy</Button>
-                                    </Link>
+                                    <Button color="danger" size="sm" className="btn-pill">Không được hủy</Button>
                                   </td>
                                 </tr>
                               )
@@ -106,6 +133,18 @@ class CancelSchedule extends Component {
                   </CardBody>
               }
             </Card>
+            <Modal isOpen={openConfirmDoneSchedule} toggle={this.openConfirmDoneSchedule}>
+              <ModalHeader toggle={this.openConfirmDoneSchedule}>Xác nhận hoàn thành dịch vụ</ModalHeader>
+              <ModalBody>
+                Bạn chắc chắn muốn thực hiện hành động này ?
+              </ModalBody>
+              <ModalFooter>
+                {
+                  isLoadingConfirmDone ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.toCancelSchedule}>Xác nhận</Button>
+                }
+                <Button color="secondary" onClick={this.openConfirmDoneSchedule}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
           </Col>
         </Row>
         <ToastContainer />

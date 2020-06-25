@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 // import { AppAsideToggler} from '@coreui/react';
-import logo from '../../assets/img/brand/logo.png';
+import logo from '../../assets/img/brand/nkt.png';
 
 const propTypes = {
   children: PropTypes.node,

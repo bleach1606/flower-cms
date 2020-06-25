@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardHeader, Col, Row, Table, Spinner } from 'reactstrap';
 import { Link } from "react-router-dom";
-import moment from 'moment-timezone';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ServiceManagement from "../../services/serviceManagement";
+import serviceCategory from '../../services/category';
 
 class Category extends Component {
   constructor(props) {
@@ -36,7 +35,7 @@ class Category extends Component {
 
   getListSchedule = async () => {
     try {
-      const data = await ServiceManagement.getListSchedule(2);
+      const data = await serviceCategory.getListCategory();
       this.setState({
         categorys: data.data,
         isLoading: false
@@ -54,7 +53,7 @@ class Category extends Component {
           <Col xs="12" lg="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách chờ xác nhận
+                <i className="fa fa-align-justify"></i> Danh sách danh mục
               </CardHeader>
               {
                 isLoading ?
@@ -65,28 +64,22 @@ class Category extends Component {
                       <thead>
                         <tr>
                           <th>ID</th>
-                          <th>Tên khách hàng</th>
-                          <th>Tên người nhận</th>
-                          <th>Số điện thoại</th>
-                          <th>Địa chỉ</th>
-                          <th>Ngày tạo</th>
+                          <th>Tên danh mục</th>
+                          <th>Avatar</th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
                         {
                           categorys.length ?
-                            categorys.map(schedule => {
+                            categorys.map(category => {
                               return (
-                                <tr key={schedule.id}>
-                                  <td>{schedule.id}</td>
-                                  <td>{schedule.users.people.firstName + schedule.users.people.lastName}</td>
-                                  <td>{schedule.receiverName}</td>
-                                  <td>{schedule.receiverTel}</td>
-                                  <td>{schedule.receiverAddress}</td>
-                                  <td>{moment(schedule.orderDate).local().format('DD/MM/YYYY HH:mm')}</td>
+                                <tr key={category.id}>
+                                  <td>{category.id}</td>
+                                  <td>{category.name}</td>
+                                  <td>{category.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + category.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
                                   <td>
-                                    <Link to={`/orderbill/${schedule.id}`}>
+                                    <Link to={`/category/find-by-id/${category.id}`}>
                                       <Button color="info" size="sm" className="btn-pill">Chi tiết</Button>
                                     </Link>
                                   </td>

@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Table, Spinner } from 'reactstrap';
+import { Card, CardBody, CardHeader, Spinner, Col, Row, Table} from 'reactstrap';
+import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ServiceCategory from '../../services/category';
 import MoneyFormat from "../Default/moneyFormat";
 
-class FlowerProducts extends Component {
+class CategoryDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: [],
-      isLoading: true,
-      type: "",
-      query: ""
+      detailCategory: [],
+      redirect: false,
+      isLoading: false,
+      loadingdetailCategory: true
     }
   }
 
-  componentDidMount = async () => {
-    await this.getListSchedule();
+  componentDidMount() {
+    this.getScheduleDetails(this.props.match.params.id);
+  }
+
+  getScheduleDetails = async (id) => {
+    try {
+      const response = await ServiceCategory.findById(id)
+      this.setState({
+        detailCategory: response.data,
+        loadingDetailSchedule: false
+      })
+    } catch (error) {
+      this.showNotification('Đã xảy ra lỗi, vui lòng thử lại sau', false);
+    }
   }
 
   handleChange = name => event => {
@@ -26,39 +39,48 @@ class FlowerProducts extends Component {
     })
   }
 
-  showNotification = (message) => {
-    toast.error(message, {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      autoClose: 2000
+  openModalCancelSchedule = () => {
+    this.setState({
+      openModalCancelSchedule: !this.state.openModalCancelSchedule
     })
   }
 
-  getListSchedule = async () => {
-    try {
-      const data = await ServiceCategory.findALL();
-      this.setState({
-        list: data.data,
-        isLoading: false
+  openModalConfirmSchedule = () => {
+    this.setState({
+      openModalConfirmSchedule: !this.state.openModalConfirmSchedule
+    })
+  }
+
+  showNotification = (message, status) => {
+    if (status) {
+      toast.success(message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 1000
       })
-    } catch (error) {
-      console.log(error);
+    } else {
+      toast.error(message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 1000
+      })
     }
   }
 
+
   render() {
-    const { list, isLoading } = this.state;
+    const { detailCategory, redirect, loadingDetailSchedule} = this.state;
+    if (redirect) {
+      return <Redirect to="/wait-schedule" />
+    }
     return (
       <div className="animated fadeIn">
         <Row>
           <Col xs="12" lg="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i> Danh sách sản phẩm hoa
+                <i className="fa fa-align-justify"></i> Chi tiết danh mục
               </CardHeader>
               {
-                isLoading ?
-                  <Spinner style={{ margin: '30px auto' }} color="dark" />
-                  :
+                loadingDetailSchedule ? <Spinner style={{ margin: '30px auto' }} color="dark" /> :
                   <CardBody>
                     <Table responsive striped>
                       <thead>
@@ -71,9 +93,9 @@ class FlowerProducts extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                      {
-                          list.length ?
-                          list.map(item => {
+                        {
+                          detailCategory.length ?
+                          detailCategory.map(item => {
                             return (
                               <tr key={item.id}>
                                 <td>{item.id}</td>
@@ -98,4 +120,4 @@ class FlowerProducts extends Component {
   }
 }
 
-export default FlowerProducts;
+export default CategoryDetail;

@@ -26,4 +26,12 @@ export default class ServiceCategory {
     });
     return response.data;
   }
+
+  static async updateFlowerProducts(data) {
+    const token = AuthService.getToken();
+    const response = await axios.put(`${config.domain}/flower-products/update`, data, {
+      headers: { 'Authorization': token, 'Content-Type': 'application/json' },
+    });
+    return response.data;
+  }
 }

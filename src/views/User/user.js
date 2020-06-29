@@ -1,30 +1,21 @@
 import React, { Component } from 'react';
 import { Input, Label, Modal, ModalBody, ModalHeader, ModalFooter, Button, Card, CardBody, CardHeader, Col, Row, Table, Spinner, CardFooter } from 'reactstrap';
-import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import moment from 'moment-timezone';
 import 'react-toastify/dist/ReactToastify.css';
 import ServiceCategory from '../../services/category';
-import MoneyFormat from "../Default/moneyFormat";
-import { bool } from 'prop-types';
-import Utils from '../../services/utils'
+import ServiceUser from '../../services/user';
 
-class CategoryDetail extends Component {
+class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      detailCategory: [],
-      redirect: false,
+      listUser: [],
       isLoading: false,
       isLoadingEdit: false,
-      loadingdetailCategory: true,
+      loadinglistUser: true,
       isLoadingConfirmDone: false,
-      flowerID: '', 
-      name: '', 
-      price: '', 
-      description: '',
-      avatar: '',
-      active: bool,
-      categoryID: 0, 
+      object: {}
     }
   }
 
@@ -32,12 +23,11 @@ class CategoryDetail extends Component {
     this.getScheduleDetails(this.props.match.params.id);
   }
 
-  getScheduleDetails = async (id) => {
+  getScheduleDetails = async () => {
     try {
-      const response = await ServiceCategory.findById(id)
+      const response = await ServiceUser.findALL()
       this.setState({
-        detailCategory: response.data,
-        isLoadingEdit: false,
+        listUser: response.data,
       })
     } catch (error) {
       this.showNotification('Đã xảy ra lỗi, vui lòng thử lại sau', false);
@@ -64,53 +54,11 @@ class CategoryDetail extends Component {
     }
   }
 
-  openEditFlowerProducts = (flowerID, name, price, description, avatar, active) => {
+  openEditFlowerProducts = (item, bo) => {
+    item.active = bo
     this.setState({
       openEditFlowerProducts: !this.state.openEditFlowerProducts,
-      flowerID: flowerID,
-      name: name,
-      price: price,
-      description: description,
-      avatar: avatar,
-      active: active,
-    })
-  }
-
-  openAddFlowerProducts = (flowerID, name, price, description, avatar, active) => {
-    this.setState({
-      openAddFlowerProducts: !this.state.openAddFlowerProducts,
-      flowerID: flowerID,
-      name: name,
-      price: price,
-      description: description,
-      avatar: avatar,
-      active: true
-    })
-  }
-
-  openDeleteFlowerProducts = (flowerID, name, price, description, avatar, active) => {
-    this.setState({
-      openDeleteFlowerProducts: !this.state.openDeleteFlowerProducts,
-      flowerID: flowerID,
-      name: name,
-      price: price,
-      description: description,
-      avatar: avatar,
-      active: active
-    })
-  }
-
-  fileChangedHandler = async (event) => {
-    const file = event.target.files[0];
-    const formData = new FormData()
-    formData.append(
-      'file',
-      file,
-      file.name
-    )
-    const response = await Utils.uploadSingleFile(formData);
-    this.setState({
-      avatar: response
+      object: item
     })
   }
 
@@ -132,32 +80,15 @@ class CategoryDetail extends Component {
     }
   }
 
-  addFlowerProduct = async () => {
-    try {
-      const {name, price, description, avatar, active} = this.state;
-      const data = {
-        name: name, 
-        price: price,
-        description: description,
-        avatar: avatar,
-        active: active,
-        category: {
-          id: this.props.match.params.id,
-        }
-      }
-      await ServiceCategory.createFlowerProducts(data);
-      window.location.reload(false);
-    } catch (e) {
-      this.showNotification(e.error, false);
-    }
+  openDeleteFlowerProducts = (item) => {
+    this.setState({
+      openDeleteFlowerProducts: !this.state.openDeleteFlowerProducts,
+      object: item
+    })
   }
 
-
   render() {
-    const { detailCategory, redirect, loadingDetailSchedule, name, price, description, openEditFlowerProducts, isLoadingEdit, openDeleteFlowerProducts, isLoadingConfirmDone, openAddFlowerProducts} = this.state;
-    if (redirect) {
-      return <Redirect to="/list-categorys" />
-    }
+    const { listUser, loadingDetailSchedule, name, price, description, openEditFlowerProducts, isLoadingEdit, openDeleteFlowerProducts, isLoadingConfirmDone, openAddFlowerProducts} = this.state;
     return (
       <div className="animated fadeIn">
         <Row>
@@ -176,30 +107,36 @@ class CategoryDetail extends Component {
                       <thead>
                         <tr>
                           <th>ID</th>
-                          <th>Tên sản phẩm</th>
+                          <th>Tên người dùng</th>
                           <th>Avatar</th>
-                          <th>Mô tả</th>
-                          <th>Giá (VNĐ)</th>
+                          <th>username</th>
+                          <th>Birthday</th>
+                          <th>Giới tính</th>
+                          <th>Số điện thoại</th>
+                          <th>Địa chỉ</th>
                           <th></th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
                         {
-                          detailCategory.length ?
-                          detailCategory.map(item => {
+                          listUser.length ?
+                          listUser.map(item => {
                             return (
                               <tr key={item.id}>
                                 <td>{item.id}</td>
-                                <td>{item.name}</td>
-                                <td>{item.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
-                                <td>{item.description}</td>
-                                <td>{MoneyFormat(item.price)}</td>
+                                <td>{item.people.firstName + ' ' + item.people.lastName}</td>
+                                <td>{item.people.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.people.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
+                                <td>{item.username}</td>
+                                <td>{moment(item.people.birthday).local().format('DD/MM/YYYY HH:mm')}</td>
+                                <td>{item.people.sex}</td>
+                                <td>{item.people.phoneNumber}</td>
+                                <td>{item.people.address}</td>
                                 <td style={{ width: 100 }}>
-                                  <Button onClick={() => this.openEditFlowerProducts(item.id, item.name, item.price ,item.description, item.avatar, true)} color="info" size="sm" className="btn-pill">Chỉnh sửa</Button>
+                                  <Button onClick={() => this.openEditFlowerProducts(item)} color="info" size="sm" className="btn-pill">Chỉnh sửa</Button>
                                 </td>
                                 <td style={{ width: 100 }}>
-                                  <Button onClick={() => this.openDeleteFlowerProducts(item.id, item.name, item.price ,item.description, item.avatar, false)} color="danger" size="sm" className="btn-pill">Xóa bỏ</Button>
+                                  <Button onClick={() => this.openDeleteFlowerProducts(item.id)} color="danger" size="sm" className="btn-pill">Xóa bỏ</Button>
                                 </td>
                               </tr>
                             )
@@ -244,7 +181,7 @@ class CategoryDetail extends Component {
               </ModalBody>
               <ModalFooter>
                 {
-                  isLoadingEdit ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.addFlowerProduct}>Xác nhận</Button>
+                  isLoadingEdit ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.updateCategory}>Xác nhận</Button>
                 }
                 <Button color="secondary" onClick={this.openAddFlowerProducts}>Cancel</Button>
               </ModalFooter>
@@ -270,4 +207,4 @@ class CategoryDetail extends Component {
   }
 }
 
-export default CategoryDetail;
+export default User;

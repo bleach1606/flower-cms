@@ -36,7 +36,7 @@ class ReceivedSchedule extends Component {
 
   getListSchedule = async () => {
     try {
-      const data = await ServiceManagement.getListSchedule(6);
+      const data = await ServiceManagement.getListSchedule(5);
       this.setState({
         schedules: data.data,
         isLoading: false

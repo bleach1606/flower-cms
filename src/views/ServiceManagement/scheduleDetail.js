@@ -161,6 +161,10 @@ class ScheduleDetail extends Component {
                           <th>Địa chỉ người nhận</th>
                           <td>{detailSchedule.users ? detailSchedule.receiverAddress : ""}</td>
                         </tr>
+                        <tr>
+                          <th>Loại hình thanh toán</th>
+                          <td>{detailSchedule.payment.kind}</td>
+                        </tr>
                         
                       </tbody>
                     </Table>

@@ -9,7 +9,7 @@ export default {
       },
     },
     {
-      name: 'Quản lý lịch đặt',
+      name: 'QUẢN LÝ LỊCH ĐẶT',
       url: '/',
       icon: 'fa fa-pencil-square fa-lg',
       children: [
@@ -46,7 +46,7 @@ export default {
       ],
     },
     {
-      name: 'Danh mục dịch vụ',
+      name: 'DANH SÁCH DỊCH VỤ',
       url: '/list-service',
       icon: 'fa fa-cc-amex fa-lg',
       children: [
@@ -62,5 +62,10 @@ export default {
         },
       ]
     },
+    {
+      name: 'DANH SÁCH USER',
+      url: '/list-user',
+      icon: 'fa fa-cc-amex fa-lg',
+    }
   ],
 };

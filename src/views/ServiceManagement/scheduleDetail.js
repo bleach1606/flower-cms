@@ -186,7 +186,7 @@ class ScheduleDetail extends Component {
                             <tr key={item.id}>
                               <td>{item.id}</td>
                               <td>{item.flowerProduct.name}</td>
-                              <td>{item.flowerProduct.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.flowerProduct.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
+                              <td>{item.flowerProduct.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.flowerProduct.avatar } style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
                               <td>{item.flowerProduct.description}</td>
                               <td style={{ textAlign: "right" }}>{MoneyFormat(item.flowerProduct.price)}</td>
                               <td style={{ textAlign: "right" }}>{item.number}</td>

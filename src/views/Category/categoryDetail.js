@@ -110,7 +110,7 @@ class CategoryDetail extends Component {
     )
     const response = await Utils.uploadSingleFile(formData);
     this.setState({
-      avatar: response
+      avatar: response.data
     })
   }
 
@@ -145,6 +145,7 @@ class CategoryDetail extends Component {
           id: this.props.match.params.id,
         }
       }
+      console.log(data)
       await ServiceCategory.createFlowerProducts(data);
       window.location.reload(false);
     } catch (e) {
@@ -192,7 +193,7 @@ class CategoryDetail extends Component {
                               <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
-                                <td>{item.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
+                                <td>{item.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.avatar} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
                                 <td>{item.description}</td>
                                 <td>{MoneyFormat(item.price)}</td>
                                 <td style={{ width: 100 }}>

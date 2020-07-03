@@ -126,7 +126,7 @@ class User extends Component {
                               <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.people.firstName + ' ' + item.people.lastName}</td>
-                                <td>{item.people.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.people.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
+                                <td>{item.people.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + item.people.avatar} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
                                 <td>{item.username}</td>
                                 <td>{moment(item.people.birthday).local().format('DD/MM/YYYY HH:mm')}</td>
                                 <td>{item.people.sex}</td>

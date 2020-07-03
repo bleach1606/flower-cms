@@ -77,7 +77,7 @@ class Category extends Component {
                                 <tr key={category.id}>
                                   <td>{category.id}</td>
                                   <td>{category.name}</td>
-                                  <td>{category.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + category.avatar + ".png"} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
+                                  <td>{category.avatar ? <img src={ "http://127.0.0.1:8080/public/download/" + category.avatar} style={{ objectFit: 'cover', objectPosition: "center", width: 50, height: 50, borderRadius: "50%" }} className="img-avatar" alt="avatar" /> : ''}</td>
                                   <td>
                                     <Link to={`/category/find-by-id/${category.id}`}>
                                       <Button color="info" size="sm" className="btn-pill">Chi tiết</Button>

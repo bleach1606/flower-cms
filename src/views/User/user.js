@@ -3,7 +3,6 @@ import { Input, Label, Modal, ModalBody, ModalHeader, ModalFooter, Button, Card,
 import { ToastContainer, toast } from 'react-toastify';
 import moment from 'moment-timezone';
 import 'react-toastify/dist/ReactToastify.css';
-import ServiceCategory from '../../services/category';
 import ServiceUser from '../../services/user';
 
 class User extends Component {
@@ -11,11 +10,16 @@ class User extends Component {
     super(props);
     this.state = {
       listUser: [],
+      userID: 0,
       isLoading: false,
       isLoadingEdit: false,
       loadinglistUser: true,
       isLoadingConfirmDone: false,
-      object: {}
+      object: {},
+      username: '',
+      password: '',
+      numberphone: '',
+      address: ''
     }
   }
 
@@ -29,6 +33,27 @@ class User extends Component {
       this.setState({
         listUser: response.data,
       })
+    } catch (error) {
+      this.showNotification('Đã xảy ra lỗi, vui lòng thử lại sau', false);
+    }
+  }
+
+  // username: object.username,
+  //     password: '',
+  //     numberphone: object.people.phoneNumber,
+  //     address: object.people.address,
+  //     object: object
+
+  updateUser = async () => {
+    try {
+      const { object, username, password, numberphone, address} = this.state;
+      object.username = username;
+      object.people.phoneNumber = numberphone;
+      object.people.address = address;
+      object.password = password;
+      console.log(object);
+      await ServiceUser.updateUser(object);
+      window.location.reload(false);
     } catch (error) {
       this.showNotification('Đã xảy ra lỗi, vui lòng thử lại sau', false);
     }
@@ -54,41 +79,41 @@ class User extends Component {
     }
   }
 
-  openEditFlowerProducts = (item, bo) => {
-    item.active = bo
+  openEditUser = (object) => {
+    console.log(object);
     this.setState({
-      openEditFlowerProducts: !this.state.openEditFlowerProducts,
-      object: item
+      openEditUser: !this.state.openEditUser,
+      username: object.username,
+      password: '',
+      numberphone: object.people.phoneNumber,
+      address: object.people.address,
+      object: object
     })
   }
 
-  updateCategory = async () => {
+  closeEditUser = () => {
+    this.setState({
+      openEditUser: !this.state.openEditUser,
+    })
+  }
+
+  deleteUser = async() => {
     try {
-      const { flowerID, name, price, description, avatar, active} = this.state;
-      const data = {
-        id: flowerID,
-        name: name, 
-        price: price,
-        description: description,
-        avatar: avatar,
-        active: active,
-      }
-      await ServiceCategory.updateFlowerProducts(data)
+      await ServiceUser.deleteById(this.state.userID)
       window.location.reload(false);
-    } catch (error) {
+    } catch (e) {
       this.showNotification('Đã xảy ra lỗi, vui lòng thử lại sau', false);
     }
   }
 
-  openDeleteFlowerProducts = (item) => {
+  openDeleteUser = (userID) => {
     this.setState({
-      openDeleteFlowerProducts: !this.state.openDeleteFlowerProducts,
-      object: item
+      openDeleteUser: !this.state.openDeleteUser,
+      userID: userID
     })
   }
-
   render() {
-    const { listUser, loadingDetailSchedule, name, price, description, openEditFlowerProducts, isLoadingEdit, openDeleteFlowerProducts, isLoadingConfirmDone, openAddFlowerProducts} = this.state;
+    const { listUser, username, password, numberphone, address, loadingDetailSchedule, openEditUser, isLoadingEdit, openDeleteUser, isLoadingConfirmDone} = this.state;
     return (
       <div className="animated fadeIn">
         <Row>
@@ -133,10 +158,10 @@ class User extends Component {
                                 <td>{item.people.phoneNumber}</td>
                                 <td>{item.people.address}</td>
                                 <td style={{ width: 100 }}>
-                                  <Button onClick={() => this.openEditFlowerProducts(item)} color="info" size="sm" className="btn-pill">Chỉnh sửa</Button>
+                                  <Button onClick={() => this.openEditUser(item)} color="info" size="sm" className="btn-pill">Chỉnh sửa</Button>
                                 </td>
                                 <td style={{ width: 100 }}>
-                                  <Button onClick={() => this.openDeleteFlowerProducts(item.id)} color="danger" size="sm" className="btn-pill">Xóa bỏ</Button>
+                                  <Button onClick={() => this.openDeleteUser(item.id)} color="danger" size="sm" className="btn-pill">Xóa bỏ</Button>
                                 </td>
                               </tr>
                             )
@@ -147,27 +172,27 @@ class User extends Component {
                   </CardBody>
               }
             </Card>
-            <Modal isOpen={openEditFlowerProducts} toggle={this.openEditFlowerProducts}>
-              <ModalHeader toggle={this.openEditFlowerProducts}>Chỉnh sửa dịch vụ</ModalHeader>
+            <Modal isOpen={openEditUser} toggle={this.closeEditUser}>
+              <ModalHeader toggle={this.closeEditUser}>Chỉnh tài khoản người dùng</ModalHeader>
               <ModalBody>
-                <Label htmlFor="name">Tên sản phẩm</Label>
-                <Input style={{ marginBottom: 30 }} type="text" placeholder="Tên sản phẩm..." onChange={this.handleChange('name')} value={name ? name : ''} />
-                <Label htmlFor="price">Giá dịch vụ</Label>
-                <Input style={{ marginBottom: 30 }} type="number" placeholder="Giá sản phẩm..." onChange={this.handleChange('price')} value={price ? price : ''} />
-                <Label htmlFor="description">Mô tả</Label>
-                <Input style={{ marginBottom: 30 }} type="text" placeholder="Mô tả sản phẩm..." onChange={this.handleChange('description')} value={description ? description : ''} />
-                <Label htmlFor="name">Ảnh đại diện dịch vụ</Label>
-                <Input style={{ marginBottom: 30 }} type="file" onChange={this.fileChangedHandler} accept="image/x-png,image/gif,image/jpeg" />
+                <Label htmlFor="username">Username</Label>
+                <Input style={{ marginBottom: 30 }} type="text" placeholder="username..." onChange={this.handleChange('username')} value={username ? username : ''} />
+                <Label htmlFor="password">Password</Label>
+                <Input style={{ marginBottom: 30 }} type="text" placeholder="password..." onChange={this.handleChange('password')} value={password ? password : ''} />
+                <Label htmlFor="numberphone">Số điện thoại</Label>
+                <Input style={{ marginBottom: 30 }} type="text" placeholder="Số điện thoại..." onChange={this.handleChange('numberphone')} value={numberphone ? numberphone : ''} />
+                <Label htmlFor="address">Địa chỉ</Label>
+                <Input style={{ marginBottom: 30 }} type="text" placeholder="Địa chỉ..." onChange={this.handleChange('address')} value={address ? address : ''} />
               </ModalBody>
               <ModalFooter>
                 {
-                  isLoadingEdit ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.updateCategory}>Xác nhận</Button>
+                  isLoadingEdit ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.updateUser}>Xác nhận</Button>
                 }
-                <Button color="secondary" onClick={this.openEditFlowerProducts}>Cancel</Button>
+                <Button color="secondary" onClick={this.closeEditUser}>Cancel</Button>
               </ModalFooter>
             </Modal>
             
-            <Modal isOpen={openAddFlowerProducts} toggle={this.openAddFlowerProducts}>
+            {/* <Modal isOpen={openAddFlowerProducts} toggle={this.openAddFlowerProducts}>
               <ModalHeader toggle={this.openAddFlowerProducts}>Thêm mới sản phẩm</ModalHeader>
               <ModalBody>
                 <Label htmlFor="name">Tên sản phẩm</Label>
@@ -181,22 +206,22 @@ class User extends Component {
               </ModalBody>
               <ModalFooter>
                 {
-                  isLoadingEdit ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.updateCategory}>Xác nhận</Button>
+                  isLoadingEdit ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.deleteUser}>Xác nhận</Button>
                 }
                 <Button color="secondary" onClick={this.openAddFlowerProducts}>Cancel</Button>
               </ModalFooter>
-            </Modal>
+            </Modal> */}
 
-            <Modal isOpen={openDeleteFlowerProducts} toggle={this.openDeleteFlowerProducts}>
-              <ModalHeader toggle={this.openDeleteFlowerProducts}>Xác nhận hoàn thành dịch vụ</ModalHeader>
+            <Modal isOpen={openDeleteUser} toggle={this.openDeleteUser}>
+              <ModalHeader toggle={this.openDeleteUser}>Xác nhận xóa user</ModalHeader>
               <ModalBody>
                 Bạn chắc chắn muốn thực hiện hành động này ?
               </ModalBody>
               <ModalFooter>
                 {
-                  isLoadingConfirmDone ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.updateCategory}>Xác nhận</Button>
+                  isLoadingConfirmDone ? <Button disabled color="primary">...Loading</Button> : <Button color="primary" onClick={this.deleteUser}>Xác nhận</Button>
                 }
-                <Button color="secondary" onClick={this.openDeleteFlowerProducts}>Cancel</Button>
+                <Button color="secondary" onClick={this.openDeleteUser}>Cancel</Button>
               </ModalFooter>
             </Modal>
           </Col>

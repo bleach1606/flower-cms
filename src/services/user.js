@@ -11,4 +11,20 @@ export default class ServiceUser {
     return response.data;
   }
 
+  static async deleteById(id) {
+    const token = AuthService.getToken();
+    const response = await axios.delete(`${config.domain}/users/delete/${id}`, {
+      headers: { 'Authorization': token},
+    });
+    return response.data;
+  }
+
+  static async updateUser(data) {
+    const token = AuthService.getToken();
+    const response = await axios.put(`${config.domain}/users/update`,data, {
+      headers: { 'Authorization': token},
+    });
+    return response.data;
+  }
+
 }

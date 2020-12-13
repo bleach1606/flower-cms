@@ -1,15 +1,22 @@
 export default class AuthServices {
+  
   static isLoggedIn() {
-    return (localStorage.getItem("username") && localStorage.getItem("token")) ? true : false;
+    return (localStorage.getItem("btc")) ? true : false;
   }
 
-  static storeUserData(data) {
-    localStorage.setItem('username', data.data.user.username);
-    localStorage.setItem('role', data.data.user.role);
-    localStorage.setItem('token', data.data.accessToken);
+  static storeBTCData(data) {
+    localStorage.setItem('btc', data.data.btc);
   }
 
-  static getToken() {
-    return localStorage.getItem("token");
+  static getBTC() {
+    return localStorage.getItem('btc')
+  }
+
+  static storeDoitacData(doitac) {
+    localStorage.setItem('doitac', doitac)
+  }
+
+  static getDoitac() {
+    return localStorage.getItem('doitac')
   }
 }

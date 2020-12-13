@@ -9,6 +9,6 @@ export default class AccountService {
       username,
       password
     })
-    AuthService.storeUserData(response.data);
+    AuthService.storeBTCData(response.data);
   }
 }

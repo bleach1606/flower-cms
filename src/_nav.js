@@ -2,70 +2,38 @@ export default {
   items: [
     {
       title: true,
-      name: 'Quản lý dịch vụ',
+      name: 'Giao diện BTC',
       wrapper: {
         element: '',
         attributes: {},
       },
     },
     {
-      name: 'QUẢN LÝ LỊCH ĐẶT',
+      name: 'NHIỆM VỤ BTC',
       url: '/',
       icon: 'fa fa-pencil-square fa-lg',
       children: [
         {
-          name: 'Đang chờ',
-          url: '/await-schedule',
+          name: 'Hợp đồng bản quyền',
+          url: '/chon-doitac',
           icon: '',
         },
         {
-          name: 'Đã xác nhận',
-          url: '/confirm-schedule',
+          name: 'Nhiệm vụ ...',
+          url: '/todo-nhiemvu-1',
           icon: '',
         },
         {
-          name: 'Đang đóng gói',
-          url: '/packing-schedule',
+          name: 'Nhiệm vụ ...',
+          url: '/todo-nhiemvu-2',
           icon: '',
         },
         {
-          name: 'Đang được giao',
-          url: '/shipping-schedule',
+          name: 'Nhiệm vụ ...',
+          url: '/todo-nhiemvu-3',
           icon: '',
-        },
-        {
-          name: 'Đã giao hàng',
-          url: '/received-schedule',
-          icon: '',
-        },
-        {
-          name: 'Yêu cầu hủy',
-          url: '/cancel-schedule',
-          icon: '',
-        },
+        }
       ],
-    },
-    {
-      name: 'DANH SÁCH DỊCH VỤ',
-      url: '/list-service',
-      icon: 'fa fa-cc-amex fa-lg',
-      children: [
-        {
-          name: 'Danh mục sản phẩm',
-          url: '/list-categorys',
-          icon: '',
-        },
-        {
-          name: 'Danh sách sản phẩm',
-          url: '/list-flower-products',
-          icon: '',
-        },
-      ]
-    },
-    {
-      name: 'DANH SÁCH USER',
-      url: '/list-user',
-      icon: 'fa fa-cc-amex fa-lg',
     }
   ],
 };

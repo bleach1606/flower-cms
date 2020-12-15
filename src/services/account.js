@@ -1,6 +1,6 @@
 import axios from "axios";
 import config from "../config";
-import AuthService from "./auth";
+import DataService from "./savedata";
 
 
 export default class AccountService {
@@ -9,6 +9,6 @@ export default class AccountService {
       username,
       password
     })
-    AuthService.storeBTCData(response.data);
+    DataService.storeBTCData(response.data);
   }
 }

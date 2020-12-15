@@ -4,7 +4,7 @@ import { FormGroup, Input, Button, Card, CardBody, CardHeader, Col, Row, Table, 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DoitacService from '../../services/doitac';
-import AuthServices from '../../services/auth'
+import DateServices from '../../services/savedata'
 
 class Doitac extends Component {
   constructor(props) {
@@ -51,7 +51,8 @@ class Doitac extends Component {
       isLoading: true
     }, async () => {
       try {
-        await AuthServices.storeDoitacData(item);
+        DateServices.storeDoitacData(item);
+        DateServices.storeHopdongTrandaus([]);
         this.setState({
           isLoading: false,
           redirect: true
@@ -83,18 +84,19 @@ class Doitac extends Component {
             <Card>
               <CardHeader>
                 <i className="fa fa-align-justify"></i> Chọn đối tác
-                <FormGroup row>
-                  <Col md="3">
-                  <Input style={{ marginBottom: 30}} type="text" onChange={this.handleChange('ten')} placeholder="Tìm đối tác..."/>
-                  </Col>
-                  <Col xs="12" md="9">
-                  <Button style={{ width: 100}} block color="success" onClick={this.getDoitac}>Tìm kiếm</Button>
-                  </Col>
-                </FormGroup>
+                
               </CardHeader>
               {
                 isLoading ? <Spinner style={{ margin: '30px auto' }} color="dark" /> :
                   <CardBody>
+                    <FormGroup row >
+                      <Col md="6">
+                      <Input style={{ marginBottom: 30}} type="text" onChange={this.handleChange('ten')} placeholder="Tìm đối tác..."/>
+                      </Col>
+                      <Col xs="12" md="6">
+                      <Button style={{ width: 100}} block color="success" onClick={this.getDoitac}>Tìm kiếm</Button>
+                      </Col>
+                    </FormGroup>
                     <Table responsive striped>
                       <thead>
                         <tr>

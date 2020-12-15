@@ -19,7 +19,7 @@ import {
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
-import AuthService from "../../services/auth";
+import DateService from "../../services/savedata";
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
@@ -46,7 +46,7 @@ class DefaultLayout extends Component {
 
   render() {
     let navigationAccountant = null;
-    const isLoggedIn = AuthService.isLoggedIn();
+    const isLoggedIn = DateService.isLoggedIn();
     if (!this.state.isLoading && this.state.tokenExpiryDate) {
       localStorage.removeItem('username');
       localStorage.removeItem('token');

@@ -39,7 +39,13 @@ class Login extends Component {
           redirect: true
         })
       } catch (error) {
-        console.log(error);
+        let message = error.response.data.message;
+        this.setState({
+          isLoading: false,
+          error: message
+        })
+
+        // let message = error.response.data.message;
       }
     })
   }
